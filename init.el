@@ -23,9 +23,9 @@
 (prefer-coding-system 'utf-8)
 
 ;; env
-;(setq exec-path (cons "/usr/local/bin" exec-path))
+;(setq exec-path (cons "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/bin" exec-path))
 (setenv "PATH"
-  (concat "/Users/kzfm/.nvm/v0.6.14/bin:/usr/local/share/python:/Users/kzfm/bin:/usr/local/bin:" (getenv "PATH")))
+  (concat "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/share/python:/Users/kzfm/bin:/usr/local/bin:" (getenv "PATH")))
 
 (dolist (path (reverse (split-string (getenv "PATH") ":")))
 (add-to-list 'exec-path path t))
@@ -91,6 +91,21 @@
 
 (define-key ac-complete-mode-map "\C-n" 'ac-next)
 (define-key ac-complete-mode-map "\C-p" 'ac-previous)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+ '(custom-enabled-themes (quote (manoj-dark)))
+ '(safe-local-variable-values (quote ((encoding . utf-8)))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 ;; other settings
 (load "conf/init-common")

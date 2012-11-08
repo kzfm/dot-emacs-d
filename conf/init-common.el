@@ -15,7 +15,7 @@
 (line-number-mode 1) ; 行番号の表示
 (column-number-mode 1) ; 列番号の表示
 (display-battery-mode 1) ; バッテリー残量の表示
-(setq ring-bell-function (lambda ())) ; ビープを無効化し､画面のちらつきも防ぐ
+(setq ring-bell-function (lambda ())) ; ビープを無効化し画面のちらつきも防ぐ
 
 (set-frame-parameter (selected-frame)  'alpha  '(80 40))
 
