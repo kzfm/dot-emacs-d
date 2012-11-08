@@ -22,26 +22,46 @@
 ; 極力UTF-8とする
 (prefer-coding-system 'utf-8)
 
-;;; 行番号表示
-(global-linum-mode t)
+;; env
+;(setq exec-path (cons "/usr/local/bin" exec-path))
+(setenv "PATH"
+  (concat "/Users/kzfm/.nvm/v0.6.14/bin:/usr/local/share/python:/Users/kzfm/bin:/usr/local/bin:" (getenv "PATH")))
 
-;;; 分割
-(defun other-window-or-split ()
-  (interactive)
-  (when (one-window-p)
-    (split-window-horizontally))
-  (other-window 1))
+(dolist (path (reverse (split-string (getenv "PATH") ":")))
+(add-to-list 'exec-path path t))
 
-(global-set-key (kbd "<C-tab>") 'other-window-or-split)
-(global-set-key (kbd "<C-S-tab>") 'delete-window)
+;; font
+(when (>= emacs-major-version 23)
+ (set-face-attribute 'default nil
+                     :family "monaco"
+                     :height 140)
+ (set-fontset-font
+  (frame-parameter nil 'font)
+  'japanese-jisx0208
+  '("Hiragino Maru Gothic Pro" . "iso10646-1"))
+ (set-fontset-font
+  (frame-parameter nil 'font)
+  'japanese-jisx0212
+  '("Hiragino Maru Gothic Pro" . "iso10646-1"))
+ (set-fontset-font
+  (frame-parameter nil 'font)
+  'mule-unicode-0100-24ff
+  '("monaco" . "iso10646-1"))
+ (setq face-font-rescale-alist
+      '(("^-apple-hiragino.*" . 1.2)
+        (".*osaka-bold.*" . 1.2)
+        (".*osaka-medium.*" . 1.2)
+        (".*courier-bold-.*-mac-roman" . 1.0)
+        (".*monaco cy-bold-.*-mac-cyrillic" . 0.9)
+        (".*monaco-bold-.*-mac-roman" . 0.9)
+        ("-cdac$" . 1.3))))
 
-(add-to-list 'load-path (expand-file-name "~/.emacs.d"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/auto-install"))
-
-;; C-h
+;; keyboard bindings
 (define-key global-map (kbd "C-h") 'delete-backward-char)
 (define-key global-map (kbd "M-?") 'help-for-help)
-(define-key global-map (kbd "C-x C-g") 'grep)
+(define-key global-map (kbd "M-C-g") 'grep)
+; Magit rules!
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;;; 再帰的にgrep
 (require 'grep)
@@ -66,10 +86,13 @@
 (require 'recentf-ext)
 (global-set-key "\C-]" 'recentf-open-files)
 
-(load "conf/init-python")
-
 (require 'auto-complete)
 (global-auto-complete-mode t)
 
 (define-key ac-complete-mode-map "\C-n" 'ac-next)
 (define-key ac-complete-mode-map "\C-p" 'ac-previous)
+
+;; other settings
+(load "conf/init-common")
+(load "conf/init-python")
+
