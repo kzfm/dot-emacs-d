@@ -26,7 +26,7 @@
 ;;; max-frame
 ;(require 'maxframe)
 ;(add-hook 'window-setup-hook 'maximize-frame t)
-;(set-frame-size (selected-frame) 155 42)
+(set-frame-size (selected-frame) 150 40)
 
 ;; 括弧の対応をハイライト.
 (show-paren-mode 1)
@@ -47,10 +47,10 @@
 (iswitchb-mode 1)
 
 ;; 画面分割
-(defun other-window-or-split ()
-  (interactive)
-  (when (one-window-p)
-    (split-window-horizontally))
-  (other-window 1))
+;; (defun other-window-or-split ()
+;;   (interactive)
+;;   (when (one-window-p)
+;;     (split-window-horizontally))
+;;   (other-window 1))
 
-(global-set-key (kbd "<C-tab>") 'other-window-or-split)
+;; (global-set-key (kbd "<C-tab>") 'other-window-or-split)

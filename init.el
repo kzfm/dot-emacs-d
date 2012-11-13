@@ -1,7 +1,7 @@
 ;;; ロードパスの追加
 (setq load-path (append
                  '("~/.emacs.d"
-                   "~/.emacs.d/packages"
+                   "~/.emacs.d/packages/emacs-jedi"
                    "~/.emacs.d/auto-install"
                    "~/.emacs.d/conf")
                  load-path))
@@ -25,7 +25,7 @@
 ;; env
 ;(setq exec-path (cons "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/bin" exec-path))
 (setenv "PATH"
-  (concat "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/share/python:/Users/kzfm/bin:/usr/local/bin:" (getenv "PATH")))
+  (concat "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/share/python:/Users/kzfm/bin:/usr/local/bin:/Users/kzfm/Library/Haskell/bin:" (getenv "PATH")))
 
 (dolist (path (reverse (split-string (getenv "PATH") ":")))
 (add-to-list 'exec-path path t))
@@ -61,7 +61,15 @@
 (define-key global-map (kbd "M-?") 'help-for-help)
 (define-key global-map (kbd "M-C-g") 'grep)
 ; Magit rules!
-(global-set-key (kbd "C-x g") 'magit-status)
+;(global-set-key (kbd "C-x g") 'magit-status)
+; 動的略語展開
+(define-key global-map "\C-o" 'dabbrev-expand)
+;; key-chord
+(require 'key-chord)
+(key-chord-mode 1)
+(key-chord-define-global "ms" 'magit-status)
+(key-chord-define-global "jk" 'delete-window)
+
 
 ;;; 再帰的にgrep
 (require 'grep)
@@ -86,12 +94,20 @@
 (require 'recentf-ext)
 (global-set-key "\C-]" 'recentf-open-files)
 
+;; auto-complete
 (require 'auto-complete)
 (global-auto-complete-mode t)
 
 (define-key ac-complete-mode-map "\C-n" 'ac-next)
 (define-key ac-complete-mode-map "\C-p" 'ac-previous)
 
+;; http://d.hatena.ne.jp/TakashiHattori/20120629/1340942555
+(add-hook 'emacs-startup-hook
+	  (function (lambda ()
+		      (require 'auto-complete-config)
+		      (ac-config-default))))
+
+;; custom-theme
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -107,7 +123,23 @@
  ;; If there is more than one, they won't work right.
  )
 
+;; ignore active-process
+
+(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+  "Prevent annoying \"Active processes exist\" query when you quit Emacs."
+  (flet ((process-list ())) ad-do-it))
+
 ;; other settings
 (load "conf/init-common")
 (load "conf/init-python")
+(load "conf/init-sgml")
 
+;; haskell ghc-mod
+;; https://github.com/kazu-yamamoto/ghc-mod
+(autoload 'ghc-init "ghc" nil t)
+(add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
+
+(add-hook 'haskell-mode-hook '(lambda ()
+                                (local-set-key "\C-j" (lambda () (interactive)(insert " -> ")))
+                                (local-set-key "\M-j" (lambda ()(interactive)(insert " <- ")))
+                                ))
