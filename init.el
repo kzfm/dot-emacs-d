@@ -2,6 +2,7 @@
 (setq load-path (append
                  '("~/.emacs.d"
                    "~/.emacs.d/packages/emacs-jedi"
+                   "~/.emacs.d/packages/json-mode"
                    "~/.emacs.d/auto-install"
                    "~/.emacs.d/conf")
                  load-path))
@@ -133,13 +134,40 @@
 (load "conf/init-common")
 (load "conf/init-python")
 (load "conf/init-sgml")
+(load "conf/init-flymake")
 
 ;; haskell ghc-mod
 ;; https://github.com/kazu-yamamoto/ghc-mod
+;;(setq ghc-ghc-options '("-i/Users/kzfm/Library/Haskell/bin"))
 (autoload 'ghc-init "ghc" nil t)
-(add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
-
 (add-hook 'haskell-mode-hook '(lambda ()
+				(ghc-init)
                                 (local-set-key "\C-j" (lambda () (interactive)(insert " -> ")))
-                                (local-set-key "\M-j" (lambda ()(interactive)(insert " <- ")))
+                                (local-set-key "\M-j" (lambda () (interactive)(insert " => ")))
+                                (local-set-key "\C-l" (lambda ()(interactive)(insert " <- ")))
                                 ))
+
+;; http://comments.gmane.org/gmane.comp.lang.haskell.cafe/85859
+(defadvice inferior-haskell-load-file (after change-focus-after-load)
+  "Change focus to GHCi window after C-c C-l command"
+  (other-window 1))
+
+(ad-activate 'inferior-haskell-load-file)
+
+(add-hook 'coffee-mode-hook '(lambda ()
+                                (make-local-variable 'tab-width)
+				(set 'tab-width 2)
+                                (local-set-key "\C-j" (lambda () (interactive)(insert " -> ")))
+                                (local-set-key "\M-j" (lambda ()(interactive)(insert " => ")))
+                                ))
+
+;; JSON
+(require 'json-mode)
+(add-to-list 'auto-mode-alist '("\\.tss$" . json-mode))
+(add-hook 'json-mode-hook 'electric-pair-mode)
+(add-hook 'json-mode-hook '(lambda ()
+			     (setq js-indent-level 2)
+			     ))
+
+;; expand-region
+(global-set-key (kbd "C-=") 'er/expand-region)
