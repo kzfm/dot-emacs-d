@@ -171,3 +171,8 @@
 
 ;; expand-region
 (global-set-key (kbd "C-=") 'er/expand-region)
+
+;; haskell ghc-mod
+;; https://github.com/kazu-yamamoto/ghc-mod
+(autoload 'ghc-init "ghc" nil t)
+(add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))
