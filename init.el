@@ -26,31 +26,9 @@
 ;; env
 ;(setq exec-path (cons "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/bin" exec-path))
 (setenv "PATH"
-  (concat "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/share/python:/Users/kzfm/bin:/usr/local/bin:/Users/kzfm/Library/Haskell/bin" (getenv "PATH")))
+  (concat "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/share/python:/Users/kzfm/bin:/usr/local/bin:/Users/kzfm/Library/Haskell/bin:" (getenv "PATH")))
 (dolist (path (reverse (split-string (getenv "PATH") ":")))
 (add-to-list 'exec-path path t))
-
-;; (let* ((asciifont "Source Code Pro")
-;;               (jpfont "Hiragino Maru Gothic ProN")
-;;               (fontspec (font-spec :family asciifont :size 15))
-;;               (jp-fontspec (font-spec :family jpfont :size 15)))
-;;     (set-face-attribute 'default nil :family asciifont)
-;;     (set-fontset-font nil 'japanese-jisx0213.2004-1 jp-fontspec)
-;;     (set-fontset-font nil 'japanese-jisx0213-2 jp-fontspec)
-;;     (set-fontset-font nil 'katakana-jisx0201 jp-fontspec) ; 半角カナ
-;;     (set-fontset-font nil '(#x0080 . #x024F) fontspec) ; 分音符付きラテン
-;;     (set-fontset-font nil '(#x0370 . #x03FF) fontspec) ; ギリシャ文字
-;;     )
-
-;; font
-;; (create-fontset-from-ascii-font "Menlo-14:weight=normal:slant=normal" nil "menlokakugo")
-;; (set-fontset-font "fontset-menlokakugo"
-;;                   'unicode
-;;                   (font-spec :family "Hiragino Kaku Gothic ProN" :size 16)
-;;                   nil
-;;                   'append)
-;; (add-to-list 'default-frame-alist '(font . "fontset-menlokakugo"))
-;; (set-face-bold-p 'font-lock-function-name-face nil)
 
 (when (>= emacs-major-version 23)
  (set-face-attribute 'default nil

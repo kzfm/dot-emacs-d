@@ -9,8 +9,8 @@
                                 ))
 
 (autoload 'ghc-init "ghc" nil t)
+;(add-hook 'haskell-mode-hook (lambda () (ghc-init)))﻿
 (add-hook 'haskell-mode-hook (lambda () (ghc-init) (flymake-mode)))﻿
-;;(add-hook 'haskell-mode-hook (lambda () (ghc-init)))﻿
 
 ;; http://comments.gmane.org/gmane.comp.lang.haskell.cafe/85859
 (defadvice inferior-haskell-load-file (after change-focus-after-load)
