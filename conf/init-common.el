@@ -46,11 +46,24 @@
 ;; iswitch
 (iswitchb-mode 1)
 
-;; 画面分割
-;; (defun other-window-or-split ()
-;;   (interactive)
-;;   (when (one-window-p)
-;;     (split-window-horizontally))
-;;   (other-window 1))
+;; indent
+(setq-default indent-tabs-mode nil)
 
-;; (global-set-key (kbd "<C-tab>") 'other-window-or-split)
+;; buffer
+(global-set-key "\C-x\C-b" 'buffer-menu)
+
+;; 画面分割
+(defun other-window-or-split ()
+  (interactive)
+  (when (one-window-p)
+    (split-window-horizontally))
+  (other-window 1))
+
+(global-set-key (kbd "<C-tab>") 'other-window-or-split)
+
+;; expand-region
+(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C-M-=") 'er/contract-region)
+
+;; transient-mark-modeが nilでは動作しませんので注意
+(transient-mark-mode t)

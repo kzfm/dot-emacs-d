@@ -26,12 +26,32 @@
 ;; env
 ;(setq exec-path (cons "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/bin" exec-path))
 (setenv "PATH"
-  (concat "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/share/python:/Users/kzfm/bin:/usr/local/bin:/Users/kzfm/Library/Haskell/bin:" (getenv "PATH")))
-
+  (concat "/Users/kzfm/.nvm/v0.8.10/bin:/usr/local/share/python:/Users/kzfm/bin:/usr/local/bin:/Users/kzfm/Library/Haskell/bin" (getenv "PATH")))
 (dolist (path (reverse (split-string (getenv "PATH") ":")))
 (add-to-list 'exec-path path t))
 
+;; (let* ((asciifont "Source Code Pro")
+;;               (jpfont "Hiragino Maru Gothic ProN")
+;;               (fontspec (font-spec :family asciifont :size 15))
+;;               (jp-fontspec (font-spec :family jpfont :size 15)))
+;;     (set-face-attribute 'default nil :family asciifont)
+;;     (set-fontset-font nil 'japanese-jisx0213.2004-1 jp-fontspec)
+;;     (set-fontset-font nil 'japanese-jisx0213-2 jp-fontspec)
+;;     (set-fontset-font nil 'katakana-jisx0201 jp-fontspec) ; 半角カナ
+;;     (set-fontset-font nil '(#x0080 . #x024F) fontspec) ; 分音符付きラテン
+;;     (set-fontset-font nil '(#x0370 . #x03FF) fontspec) ; ギリシャ文字
+;;     )
+
 ;; font
+;; (create-fontset-from-ascii-font "Menlo-14:weight=normal:slant=normal" nil "menlokakugo")
+;; (set-fontset-font "fontset-menlokakugo"
+;;                   'unicode
+;;                   (font-spec :family "Hiragino Kaku Gothic ProN" :size 16)
+;;                   nil
+;;                   'append)
+;; (add-to-list 'default-frame-alist '(font . "fontset-menlokakugo"))
+;; (set-face-bold-p 'font-lock-function-name-face nil)
+
 (when (>= emacs-major-version 23)
  (set-face-attribute 'default nil
                      :family "monaco"
@@ -122,7 +142,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(font-lock-function-name-face ((t (:foreground "mediumspringgreen" :weight normal :height 1.0)))))
 
 ;; ignore active-process
 
@@ -130,36 +150,17 @@
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
   (flet ((process-list ())) ad-do-it))
 
-;; other settings
-(load "conf/init-common")
-(load "conf/init-python")
-(load "conf/init-sgml")
-(load "conf/init-flymake")
+;;
 
-;; haskell ghc-mod
-;; https://github.com/kazu-yamamoto/ghc-mod
-;;(setq ghc-ghc-options '("-i/Users/kzfm/Library/Haskell/bin"))
-(autoload 'ghc-init "ghc" nil t)
-(add-hook 'haskell-mode-hook '(lambda ()
-				(ghc-init)
-                                (local-set-key "\C-j" (lambda () (interactive)(insert " -> ")))
-                                (local-set-key "\M-j" (lambda () (interactive)(insert " => ")))
-                                (local-set-key "\C-l" (lambda ()(interactive)(insert " <- ")))
-                                ))
-
-;; http://comments.gmane.org/gmane.comp.lang.haskell.cafe/85859
-(defadvice inferior-haskell-load-file (after change-focus-after-load)
-  "Change focus to GHCi window after C-c C-l command"
-  (other-window 1))
-
-(ad-activate 'inferior-haskell-load-file)
-
-(add-hook 'coffee-mode-hook '(lambda ()
-                                (make-local-variable 'tab-width)
-				(set 'tab-width 2)
-                                (local-set-key "\C-j" (lambda () (interactive)(insert " -> ")))
-                                (local-set-key "\M-j" (lambda ()(interactive)(insert " => ")))
-                                ))
+(defun scss-custom ()
+  "scss-mode-hook"
+  (and
+   (set (make-local-variable 'css-indent-offset) 2)
+   (set (make-local-variable 'scss-compile-at-save) nil)
+   )
+  )
+(add-hook 'scss-mode-hook
+  '(lambda() (scss-custom)))
 
 ;; JSON
 (require 'json-mode)
@@ -169,5 +170,11 @@
 			     (setq js-indent-level 2)
 			     ))
 
-;; expand-region
-(global-set-key (kbd "C-=") 'er/expand-region)
+;; other settings
+(load "conf/init-common")
+(load "conf/init-python")
+(load "conf/init-coffee")
+(load "conf/init-sgml")
+(load "conf/init-flymake")
+(load "conf/init-haskell")
+
