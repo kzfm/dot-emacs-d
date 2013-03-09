@@ -177,4 +177,3 @@
 (load "conf/init-sgml")
 (load "conf/init-flymake")
 (load "conf/init-haskell")
-
